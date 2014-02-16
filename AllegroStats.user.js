@@ -1,11 +1,12 @@
 // ==UserScript==
-// @name        Srednia cena ogladanych aukcji
+// @name        Allegro - Srednia cena ogladanych aukcji
 // @namespace   http://github.com/zaza
 // @include     http://allegro.pl/listing/*
-// @version     0.1
+// @version     0.2
 // @grant       none
 // ==/UserScript==
 
+(function() {
 var prices = []
 var spans = document.getElementsByClassName('bid dist')
 for (var i = 0; i < spans.length; i++) {
@@ -20,7 +21,10 @@ for (var i = 0; i < prices.length; i++){
 }
 
 var avg = sum/prices.length;
+avg = Number((avg).toFixed(2))
 
-document.getElementById('main-breadcrumb-search-hits').innerHTML += " srednia="+avg;
+if (!isNaN(avg))
+	document.getElementById('main-breadcrumb-search-hits').innerHTML += " Å›rednia="+avg;
+})();
 
 
