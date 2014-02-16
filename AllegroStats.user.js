@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name        Allegro - Srednia cena ogladanych aukcji
 // @namespace   http://github.com/zaza
-// @include     http://allegro.pl/listing/*
-// @version     0.2
+// @include     http://allegro.pl/*
+// @version     0.3
 // @grant       none
 // ==/UserScript==
 
