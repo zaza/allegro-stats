@@ -45,4 +45,22 @@ describe("Scraper", function() {
     expect(mockDocument.getElementById).toHaveBeenCalledWith('main-breadcrumb-search-hits');
     expect(mockDocument.getElementsByClassName).toHaveBeenCalledWith('bid dist');
   });
+  it("[mock] 'hits count' is properly updated", function() {
+    var small = document.createElement('small');
+    small.id = 'main-breadcrumb-search-hits';
+    small.innerHTML = '(12 ofert)'; 
+    var mockDocument = {
+      getElementsByClassName: function(className) {
+        return ['foo'];
+      },
+      getElementById: function(id) {
+        return small;
+      }
+    };
+    var scraper = new Scraper(mockDocument);
+
+    scraper.updateSearchHits(1.5);
+
+    expect(small.innerHTML).toBe('(12 ofert) średnia=1.5');
+  });
 });

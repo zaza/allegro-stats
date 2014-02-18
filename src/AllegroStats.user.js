@@ -24,9 +24,16 @@ Math.parseFloat2 = function(string) {
 function Scraper(doc) {
     this.doc = doc
 }
+
 Scraper.prototype.shouldRun = function() {
   return this.doc.getElementById('main-breadcrumb-search-hits') != null 
     && this.doc.getElementsByClassName('bid dist').length > 0
+};
+
+Scraper.prototype.updateSearchHits = function(avg) {
+    var hits = this.doc.getElementById('main-breadcrumb-search-hits')
+    if (hits != null) 
+        hits.innerHTML += " średnia="+avg
 };
 
 (function() {
@@ -44,7 +51,5 @@ Scraper.prototype.shouldRun = function() {
 
     var avg = Math.avg(prices, 2)
 
-    var hits = document.getElementById('main-breadcrumb-search-hits')
-    if (hits != null)
-        hits.innerHTML += " średnia="+avg
+    scraper.updateSearchHits(avg)
 })();
