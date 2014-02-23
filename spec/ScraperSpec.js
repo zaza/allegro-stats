@@ -63,4 +63,24 @@ describe("Scraper", function() {
 
     expect(small.innerHTML).toBe('(12 ofert) średnia=1.5');
   });
+  it("[mock] 'bid dist' price is found", function() {
+    var div = document.createElement('div');
+    div.class = 'price';
+    div.innerHTML = '<span class="bid dist">\
+ <span class="label">ogłoszenie</span> 23 400,00 <span class="currency">zł</span> </span>'
+    var mockDocument = {
+      getElementsByClassName: function(className) {
+        return new Array(div.childNodes[0]);
+      },
+      getElementById: function(id) {
+        return 'foo';
+      }
+    };
+    var scraper = new Scraper(mockDocument);
+
+    var prices = scraper.collectPrices();
+
+    expect(prices[0]).toBe(23400);
+  });
+  it("[mock] 'buy-now dist' price is found");
 });

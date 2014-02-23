@@ -30,6 +30,17 @@ Scraper.prototype.shouldRun = function() {
     && this.doc.getElementsByClassName('bid dist').length > 0
 };
 
+Scraper.prototype.collectPrices = function () {
+  var prices = []
+    var spans = this.doc.getElementsByClassName('bid dist')
+    if (spans.length == 0) return []
+    for (var i = 0; i < spans.length; i++) {
+        var price = spans[i].childNodes[2].nodeValue
+        prices.push(Math.parseFloat2(price))
+    }  
+    return prices
+}
+
 Scraper.prototype.updateSearchHits = function(avg) {
     var hits = this.doc.getElementById('main-breadcrumb-search-hits')
     if (hits != null) 
@@ -40,16 +51,7 @@ Scraper.prototype.updateSearchHits = function(avg) {
     var scraper = new Scraper(document)
     if (!scraper.shouldRun())
         return
-    var prices = []
-    // 'buy-now dist'
-    var spans = document.getElementsByClassName('bid dist')
-    if (spans.length == 0) return
-    for (var i = 0; i < spans.length; i++) {
-        var price = spans[i].childNodes[2].nodeValue
-        prices.push(Math.parseFloat2(price))
-    }
-
+    var prices = scraper.collectPrices()
     var avg = Math.avg(prices, 2)
-
     scraper.updateSearchHits(avg)
 })();
