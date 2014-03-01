@@ -27,17 +27,22 @@ function Scraper(doc) {
 
 Scraper.prototype.shouldRun = function() {
   return this.doc.getElementById('main-breadcrumb-search-hits') != null 
-    && this.doc.getElementsByClassName('bid dist').length > 0
+    && (this.doc.getElementsByClassName('bid dist').length > 0 
+        || this.doc.getElementsByClassName('buy-now dist').length > 0)
 };
 
 Scraper.prototype.collectPrices = function () {
+  return this.collectPricesForClass('bid dist').concat(this.collectPricesForClass('buy-now dist'))
+}
+
+Scraper.prototype.collectPricesForClass = function (className) {
   var prices = []
-    var spans = this.doc.getElementsByClassName('bid dist')
+    var spans = this.doc.getElementsByClassName(className)
     if (spans.length == 0) return []
     for (var i = 0; i < spans.length; i++) {
         var price = spans[i].childNodes[2].nodeValue
         prices.push(Math.parseFloat2(price))
-    }  
+    }
     return prices
 }
 

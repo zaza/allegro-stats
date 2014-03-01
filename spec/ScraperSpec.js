@@ -70,7 +70,9 @@ describe("Scraper", function() {
  <span class="label">ogłoszenie</span> 23 400,00 <span class="currency">zł</span> </span>'
     var mockDocument = {
       getElementsByClassName: function(className) {
-        return new Array(div.childNodes[0]);
+        if (className === 'bid dist')
+          return new Array(div.childNodes[0]);
+        return [];
       },
       getElementById: function(id) {
         return 'foo';
@@ -82,5 +84,25 @@ describe("Scraper", function() {
 
     expect(prices[0]).toBe(23400);
   });
-  it("[mock] 'buy-now dist' price is found");
+  it("[mock] 'buy-now dist' price is found", function() {
+    var div = document.createElement('div');
+    div.class = 'price';
+    div.innerHTML = '<span class="buy-now dist">\
+ <span class="label">Kup Teraz</span> 149,99 <span class="currency">zł</span> </span>'
+    var mockDocument = {
+      getElementsByClassName: function(className) {
+        if (className === 'buy-now dist')
+          return new Array(div.childNodes[0]);
+        return [];
+      },
+      getElementById: function(id) {
+        return 'foo';
+      }
+    };
+    var scraper = new Scraper(mockDocument);
+
+    var prices = scraper.collectPrices();
+
+    expect(prices[0]).toBe(149.99);
+  });
 });
