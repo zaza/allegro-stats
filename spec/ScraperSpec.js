@@ -45,7 +45,7 @@ describe("Scraper", function() {
     expect(mockDocument.getElementById).toHaveBeenCalledWith('main-breadcrumb-search-hits');
     expect(mockDocument.getElementsByClassName).toHaveBeenCalledWith('bid dist');
   });
-  it("[mock] 'hits count' is properly updated", function() {
+  it("[mock] 'liczba ofert' is properly updated", function() {
     var small = document.createElement('small');
     small.id = 'main-breadcrumb-search-hits';
     small.innerHTML = '(12 ofert)'; 
@@ -61,9 +61,27 @@ describe("Scraper", function() {
 
     scraper.updateSearchHits(1.5);
 
-    expect(small.innerHTML).toBe('(12 ofert) średnia=1.5');
+    expect(small.innerHTML).toBe('(12 ofert, średnia=1.5)');
   });
-  it("[mock] 'bid dist' price is found", function() {
+  it("[mock] 'liczba ofert' is properly updated on subsequent update", function() {
+    var small = document.createElement('small');
+    small.id = 'main-breadcrumb-search-hits';
+    small.innerHTML = '(12 ofert, średnia=1.5)'; 
+    var mockDocument = {
+      getElementsByClassName: function(className) {
+        return ['foo'];
+      },
+      getElementById: function(id) {
+        return small;
+      }
+    };
+    var scraper = new Scraper(mockDocument);
+
+    scraper.updateSearchHits(2.9);
+
+    expect(small.innerHTML).toBe('(12 ofert, średnia=2.9)');
+  });
+  it("[mock] 'ogłoszenie' price is found", function() {
     var div = document.createElement('div');
     div.class = 'price';
     div.innerHTML = '<span class="bid dist">\
@@ -84,7 +102,28 @@ describe("Scraper", function() {
 
     expect(prices[0]).toBe(23400);
   });
-  it("[mock] 'buy-now dist' price is found", function() {
+  it("[mock] 'licytacja' price is found", function() {
+    var div = document.createElement('div');
+    div.class = 'price';
+    div.innerHTML = '<span class="bid dist">\
+ <span class="label"></span> 99,00 <span class="currency">zł</span> </span>'
+    var mockDocument = {
+      getElementsByClassName: function(className) {
+        if (className === 'bid dist')
+          return new Array(div.childNodes[0]);
+        return [];
+      },
+      getElementById: function(id) {
+        return 'foo';
+      }
+    };
+    var scraper = new Scraper(mockDocument);
+
+    var prices = scraper.collectPrices();
+
+    expect(prices[0]).toBe(99);
+  });
+  it("[mock] 'Kup Teraz' price is found", function() {
     var div = document.createElement('div');
     div.class = 'price';
     div.innerHTML = '<span class="buy-now dist">\
