@@ -2,7 +2,7 @@
 // @name        Allegro - Średnia cena oglądanych aukcji
 // @namespace   http://github.com/zaza
 // @include     http://allegro.pl/*
-// @version     0.4*
+// @version     0.4
 // @grant       none
 // ==/UserScript==
 
@@ -48,8 +48,14 @@ Scraper.prototype.collectPricesForClass = function (className) {
 
 Scraper.prototype.updateSearchHits = function(avg) {
     var hits = this.doc.getElementById('main-breadcrumb-search-hits')
-    if (hits != null) 
-        hits.innerHTML += " średnia="+avg
+    var regex = /(\(\d+ ofert)(, średnia=[\d\.]+)?(\))/
+    if (hits != null) {
+        var str = hits.innerHTML
+        if (str.match(regex)) {
+            str = str.replace(regex, "$1, średnia=" + avg + "$3")
+            hits.innerHTML = str
+        }
+    }
 };
 
 (function() {
