@@ -2,7 +2,7 @@
 // @name        Allegro - Średnia cena oglądanych aukcji
 // @namespace   http://github.com/zaza
 // @include     http://allegro.pl/*
-// @version     0.4
+// @version     0.5
 // @grant       none
 // ==/UserScript==
 
