@@ -48,7 +48,7 @@ Scraper.prototype.collectPricesForClass = function (className) {
 
 Scraper.prototype.updateSearchHits = function(avg) {
     var hits = this.doc.getElementById('main-breadcrumb-search-hits')
-    var regex = /(\(\d+ ofert)(, średnia=[\d\.]+)?(\))/
+    var regex = /(\(\d+ oferty?)(, średnia=[\d\.]+)?(\))/
     if (hits != null) {
         var str = hits.innerHTML
         if (str.match(regex)) {

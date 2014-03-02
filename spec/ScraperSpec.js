@@ -81,6 +81,24 @@ describe("Scraper", function() {
 
     expect(small.innerHTML).toBe('(12 ofert, średnia=2.9)');
   });
+  it("[mock] 'liczba ofert' is properly updated for two hits", function() {
+    var small = document.createElement('small');
+    small.id = 'main-breadcrumb-search-hits';
+    small.innerHTML = '(2 oferty)'; 
+    var mockDocument = {
+      getElementsByClassName: function(className) {
+        return ['foo'];
+      },
+      getElementById: function(id) {
+        return small;
+      }
+    };
+    var scraper = new Scraper(mockDocument);
+
+    scraper.updateSearchHits(10.5);
+
+    expect(small.innerHTML).toBe('(2 oferty, średnia=10.5)');
+  });
   it("[mock] 'ogłoszenie' price is found", function() {
     var div = document.createElement('div');
     div.class = 'price';
